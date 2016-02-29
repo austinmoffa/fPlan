@@ -1,0 +1,53 @@
+<div class='fplan_map_container' ng-class="{'fplan_fullsize':vm.sidebar_closed==true}">
+    <div class='fplan_map_controls'>
+        <button class='btn btn-default' type='button' ng-click='vm.zoomClick(-1)'><i class="fa fa-minus-circle"></i></button>
+        <button class='btn btn-default' type='button' ng-click='vm.zoomClick(0)'><i class="fa fa-undo"></i></button>
+            <button class='btn btn-default' type='button' ng-click='vm.zoomClick(1)'><i class="fa fa-plus-circle"></i></button>
+            <button class='btn btn-default' type='button' ng-click='vm.centerClick()'><i class="fa fa-arrows"></i></button>
+
+        <div class='fplan_size_toggle' style='float:right;'>
+            <button class='btn btn-default' ng-click='vm.sidebar_closed=!vm.sidebar_closed;'><i class="fa fa-exchange"></i> </button>
+        </div>
+
+    </div>
+</div>
+
+<div class='fplan_controls fplan_right_controls' ng-if='!vm.sidebar_closed'>
+    <div class='fplan_right_seats'>
+        <div class='fplan_control_header'>Seats</div>
+        <div class='fplan_control_content'>
+        <table>
+            <th>Name</th><th></th>
+            <tr class='{{seat.uid}}' ng-mouseover='vm.seatHoverEnter(seat.uid)' ng-mouseleave='vm.seatHoverExit(seat.uid)' ng-repeat='seat in vm.seats[vm.selected_map_uid]'>
+                <td>{{seat.name}}</td>
+                <td>
+                    <div ng-repeat='occ in vm.getOccupants(seat.uid)'>
+                        {{occ.name}} - <span ng-bind-html='occ.map_data[vm.selected_map_uid].formatted_schedule'></span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </div>
+    </div>
+
+    <br>
+
+    <div class='fplan_right_people'>
+        <div class='fplan_control_header'>People</div>
+        <div class='fplan_control_content'>
+        <table>
+            <th>Name</th><th></th>
+            <tr>
+                <td><input class='form-control' size='20' type='text' ng-model='vm.temp_name'></td>
+                <td><button class='btn btn-default' type='button' ng-click='vm.addNewPerson()'>+</button></td>
+            </tr>
+            <tr ng-repeat='person in vm.people' ng-if='!person.map_data'>
+                <td><input size='20' type='text' ng-model='person.name' readonly></td>
+                <td><button class='btn btn-default' type='button' ng-click='vm.people.splice($index, 1)'>-</button></td>
+            </tr>
+
+        </table>
+        </div>
+    </div>
+</div>
+

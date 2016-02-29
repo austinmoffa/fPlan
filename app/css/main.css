@@ -1,0 +1,62 @@
+body{
+    height:100%;
+    width:100%;
+    overflow:hidden;
+}
+.fplan_controls{
+    box-shadow: 2px 2px 3px #666666;
+}
+.fplan_size_toggle{
+
+}
+.fplan_map_controls{
+    padding:2px;
+}
+.fplan_control_content{
+    padding:5px;
+}
+.fplan_control_header, .fplan_map_controls{
+    background-color:#3f51b5;
+    box-shadow: 2px 2px 3px #888888;
+    font-family: serif;
+    color:white;
+    font-weight:bold;
+    border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
+    padding:5px;
+
+}
+.fplan_control_header{
+    font-size:14px;
+    line-height: 1.42857;
+}
+.fplan_map_container{
+    float:left;
+    max-height: 100vh;
+    width:75%;
+    overflow: hidden;
+    box-shadow: 2px 2px 3px #666666;
+}
+.fplan_fullsize{
+    width:100%;
+}
+.fplan_right_controls{
+    float:right;
+    height: 100vh;
+    overflow: hidden;
+    width:25%;
+
+}
+.fplan_right_seats{
+    height:60%;
+    overflow-y: auto;
+}
+.fplan_right_people{
+    height:30%;
+    overflow-y: auto;
+}
+.hovered {
+    background-color:yellow;
+    stroke-width:10px;
+    stroke:orange;
+}

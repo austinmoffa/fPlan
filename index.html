@@ -1,0 +1,29 @@
+<!-- public/index.html -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<!-- CSS -->
+<link rel="stylesheet" href="./app/css/main.css">
+<link rel="stylesheet" href="./app/css/bootstrap.css">
+<link rel="stylesheet" href="./bower_components/font-awesome/css/font-awesome.css">
+
+<!-- JS Dependencies -->
+<script src="./bower_components/angular/angular.js"></script>
+<script src="./bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="./bower_components/angular-route/angular-route.min.js"></script>
+<script src="./bower_components/d3/d3.js"></script>
+<!-- lib -->
+<script src="./app/js/fPlan.js"></script>
+<script src="./app/js/fPlan.seat-edit-controller.js"></script>
+<script src="./app/js/fPlan.controller.js"></script>
+<!-- Angular For Demo -->
+<script src="./app/demo/app.js"></script>
+</head>
+<body ng-app="mainApp" ng-controller="MainController as vm">
+<f-plan maps='vm.maps' people='vm.people' seats='vm.seats'>
+</f-plan>
+</body>
+</html>
+
