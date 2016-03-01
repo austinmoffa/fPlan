@@ -35,6 +35,14 @@
                     if (key == 0) {
                         setVisibleMap(vm.maps[0].uid, true);
                     }
+
+                    var map_node = map_container.select('#' + map.uid);
+                    var children = map_node.selectAll('*');
+                    map_node.selectAll('*').remove();
+                    map_node = map_node.append('g');
+                    children.each(function(d) {
+                        map_node.node().appendChild(this);
+                    });
                 });
             })
         }
@@ -43,9 +51,10 @@
         var setVisibleMap = function(uid, force) { //reset all visibility just to be safe, then set new element
             if (uid != vm.selected_map_uid || force) { //Only when map has changed or on first load
                 vm.selected_map_uid = uid;
-                map_svg = map_container.selectAll('svg').style('display', 'none');
+                map_container.selectAll('svg').style('display', 'none');
                 map_svg = map_container.select('#' + uid);
-                map_svg.style('display', null).call(zoom).on('click', addSeatClickEvent);
+                map_svg.style('display', null);
+                map_svg.call(zoom).on('click', addSeatClickEvent);
                 addExistingSeats(uid);
             }
         }
@@ -155,7 +164,7 @@
         }
 
         function zoomed() {
-            map_svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+            map_svg.select('g').attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
         }
 
         function dragstarted(d) {
