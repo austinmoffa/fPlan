@@ -56,10 +56,13 @@
         }
 
         function addSeatClickEvent() {
+            var coords = d3.mouse(this);
+            coords[0] = (coords[0] - zoom.translate()[0]) / zoom.scale();
+            coords[1] = (coords[1] - zoom.translate()[1]) / zoom.scale();
             if (!d3.event.defaultPrevented) { //this is a drag detection
                 var seat_obj = {
                     name: 'New',
-                    coords: d3.mouse(this),
+                    coords: coords,
                     uid: guid(),
                 };
                 if (vm.seats[vm.selected_map_uid] == null) {
@@ -149,7 +152,7 @@
 
         var configD3Controls = function() {
             zoom = d3.behavior.zoom()
-            .scaleExtent([1, 10])
+            .scaleExtent([.2, 10])
             .on("zoom", zoomed);
 
             drag = d3.behavior.drag()
