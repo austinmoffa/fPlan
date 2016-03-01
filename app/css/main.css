@@ -70,9 +70,14 @@ ul {
     stroke:orange;
 }
 .fplan_empty_seat {
-    fill: cyan;
+    fill: lightskyblue;
 }
 .fplan_empty_seat.hovered {
-    stroke-width:10px;
-    stroke:cyan;
+    stroke:lightskyblue;
+}
+.fplan_full_seat {
+    fill: red;
+}
+.fplan_full_seat.hovered {
+    stroke:red;
 }

@@ -83,6 +83,8 @@
 
             if (getOccupants(seat.uid).length <= 0) {
                 node.classed('fplan_empty_seat', true);
+            } else if (isSeatFull(seat.uid)) {
+                node.classed('fplan_full_seat', true);
             }
 
         }
@@ -122,7 +124,9 @@
                     people: function() { return vm.people; },
                     selected_map_uid: function() { return vm.selected_map_uid;},
                     days: function() { return days; },
-                    formatSchedule: function() {return formatSchedule}
+                    formatSchedule: function() {return formatSchedule},
+                    isSeatFull: function() {return isSeatFull},
+                    full_days: function() {return getFullDays(seat_obj[0].uid)}
                 }
             });
         }
@@ -202,6 +206,35 @@
                     this.push(person);
                 }
             }, ret);
+            return ret;
+        }
+
+        var getFullDays = function(suid) {
+            var check_schedule = {};
+            angular.forEach(days, function(day, key) {
+                check_schedule[day] = false;
+            });
+            angular.forEach(vm.people, function(person, key) {
+                if (person.hasOwnProperty('map_data') && person.map_data && person.map_data.hasOwnProperty(vm.selected_map_uid) && person.map_data[vm.selected_map_uid].seat == suid) {
+                    angular.forEach(person.map_data[vm.selected_map_uid].schedule, function(day, key) {
+                        if (day) {
+                            check_schedule[key] = true;
+                        }
+                    });
+                }
+            });
+            return check_schedule;
+        }
+
+        var isSeatFull = function(suid) {
+            var check_schedule = getFullDays(suid);
+            var ret = true;
+            angular.forEach(check_schedule, function(day, key) {
+                if (!day) {
+                    ret = false;
+                }
+            });
+
             return ret;
         }
 

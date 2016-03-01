@@ -2,7 +2,7 @@
     .module('FPlan')
     .controller('SeatEditCtrl', SeatEditCtrl);
 
-    function SeatEditCtrl(seat, seats, occupants, days, people, selected_map_uid, $uibModalInstance, $sce, formatSchedule) {
+    function SeatEditCtrl(seat, seats, occupants, days, people, selected_map_uid, $uibModalInstance, $sce, formatSchedule, isSeatFull, full_days) {
         var vm = this;
         vm.days = days;
         vm.temp_seat = angular.copy(seat);
@@ -44,10 +44,16 @@
 
         vm.saveSeatEdits = function() {
             var empty = true;
+            var full = false;
             if (vm.occupants.length > 0) {
                 empty = false;
             }
+
+            if (!empty && isSeatFull(seat.uid)) {
+                full = true;
+            }
             d3.select('[uid=' + vm.seat.uid + ']').classed('fplan_empty_seat', empty);
+            d3.select('[uid=' + vm.seat.uid + ']').classed('fplan_full_seat', full);
             vm.seat.name = vm.temp_seat.name;
             angular.forEach(vm.occupants, function(occ, key) {
                 occ.map_data[vm.selected_map_uid].formatted_schedule = '';
@@ -55,6 +61,15 @@
             });
             vm.closeEditWindow();
         }
+
+        vm.preventDayOverlap = function(day, map_data) {
+            if (map_data.schedule[day] && full_days[day]) {
+                map_data.schedule[day] = false;
+            } else {
+                full_days[day] = false;
+            }
+        }
+
     }
 
 

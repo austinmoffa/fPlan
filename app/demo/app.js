@@ -31,11 +31,11 @@ angular.module('mainApp', ['FPlan'])
                 map_1: {
                     seat: 's1',
                     schedule: {
-                        monday: false,
+                        monday: true,
                         tuesday: true,
                         wednesday: true,
                         thursday: true,
-                        friday: false
+                        friday: true
                     }
                 }
             },
