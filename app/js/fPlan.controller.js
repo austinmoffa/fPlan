@@ -32,17 +32,13 @@
                         svgNode.style.display = 'none';
                     }
                     map_container.node().appendChild(svgNode);
+                    var map_node = map_container.select('#' + map.uid);
+                    map_node.html('<g>' + map_node.html() + '</g>');
+
                     if (key == 0) {
                         setVisibleMap(vm.maps[0].uid, true);
                     }
 
-                    var map_node = map_container.select('#' + map.uid);
-                    var children = map_node.selectAll('*');
-                    map_node.selectAll('*').remove();
-                    map_node = map_node.append('g');
-                    children.each(function(d) {
-                        map_node.node().appendChild(this);
-                    });
                 });
             })
         }
@@ -77,7 +73,7 @@
         }
 
         function addSeatToMap(seat) {
-            var node = map_svg.append("circle")
+            var node = map_svg.select('g').append("circle")
             .classed(seat.uid, true)
             .attr('uid', seat.uid)
             .classed('fplan_marker', true)
