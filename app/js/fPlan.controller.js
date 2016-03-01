@@ -52,6 +52,8 @@
                 map_svg.style('display', null);
                 map_svg.call(zoom).on('click', addSeatClickEvent);
                 addExistingSeats(uid);
+                centerClick();
+                zoomClick(0);
             }
         }
 
@@ -188,7 +190,7 @@
             if (direction != 0) {
                 var target_zoom = zoom.scale() * (1 + factor * direction);
             } else { //0 is our reset val
-                target_zoom = extent[0];
+                target_zoom = 1;
             }
             if (target_zoom < extent[0]) {
                 target_zoom = extent[0];
