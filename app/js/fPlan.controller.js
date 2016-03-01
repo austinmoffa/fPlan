@@ -197,12 +197,12 @@
                 target_zoom = extent[1];
              }
             zoom.scale(target_zoom);
-            map_svg.attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
+            map_svg.select('g').attr("transform", "translate(" + zoom.translate() + ")scale(" + zoom.scale() + ")");
         }
 
         var centerClick = function() {
             zoom.translate([0, 0]);
-            map_svg.attr("transform", "translate(0,0)scale(" + zoom.scale() + ")");
+            map_svg.select('g').attr("transform", "translate(0,0)scale(" + zoom.scale() + ")");
         }
 
         var getOccupants = function(suid) {
