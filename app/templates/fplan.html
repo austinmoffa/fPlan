@@ -2,8 +2,9 @@
     <div class='fplan_map_controls'>
         <button class='btn btn-default' type='button' ng-click='vm.zoomClick(-1)'><i class="fa fa-minus-circle"></i></button>
         <button class='btn btn-default' type='button' ng-click='vm.zoomClick(0)'><i class="fa fa-undo"></i></button>
-            <button class='btn btn-default' type='button' ng-click='vm.zoomClick(1)'><i class="fa fa-plus-circle"></i></button>
-            <button class='btn btn-default' type='button' ng-click='vm.centerClick()'><i class="fa fa-arrows"></i></button>
+        <button class='btn btn-default' type='button' ng-click='vm.zoomClick(1)'><i class="fa fa-plus-circle"></i></button>
+        <button class='btn btn-default' type='button' ng-click='vm.centerClick()'><i class="fa fa-arrows"></i></button>
+        <select ng-options='map.uid as map.title for map in vm.maps' class='form-control' ng-change='vm.setVisibleMap(vm.selected_map_uid_temp)' ng-model='vm.selected_map_uid_temp' style='width:20%;display:inline'></select>
 
         <div class='fplan_size_toggle' style='float:right;'>
             <button class='btn btn-default' ng-click='vm.sidebar_closed=!vm.sidebar_closed;'><i class="fa fa-exchange"></i> </button>
@@ -13,22 +14,22 @@
 </div>
 
 <div class='fplan_controls fplan_right_controls' ng-if='!vm.sidebar_closed'>
+
+
     <div class='fplan_right_seats'>
         <div class='fplan_control_header'>Seats</div>
         <div class='fplan_control_content'>
-        <table>
-            <th>Name</th><th></th>
-            <tr class='{{seat.uid}}' ng-mouseover='vm.seatHoverEnter(seat.uid)' ng-mouseleave='vm.seatHoverExit(seat.uid)' ng-repeat='seat in vm.seats[vm.selected_map_uid]'>
-                <td>{{seat.name}}</td>
-                <td>
-                    <div ng-repeat='occ in vm.getOccupants(seat.uid)'>
-                        {{occ.name}} - <span ng-bind-html='occ.map_data[vm.selected_map_uid].formatted_schedule'></span>
-                    </div>
-                </td>
-            </tr>
-        </table>
+            <div class='{{seat.uid}}' ng-mouseover='vm.seatHoverEnter(seat.uid)' ng-mouseleave='vm.seatHoverExit(seat.uid)' ng-repeat='seat in vm.seats[vm.selected_map_uid]'>
+                {{seat.name}}
+                <ul ng-repeat='occ in vm.getOccupants(seat.uid)'>
+                    <li> {{occ.name}} - <span ng-bind-html='occ.map_data[vm.selected_map_uid].formatted_schedule'></span> </li>
+                </ul>
+            </div>
         </div>
     </div>
+
+
+
 
     <br>
 

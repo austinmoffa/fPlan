@@ -1,4 +1,16 @@
 Seat Name: <input type='text' class='form-control' ng-model='vm.temp_seat.name'>
+<table>
+    <th></th> <th class='fplan_day_cell' ng-repeat='day in vm.days'> {{day[0].toUpperCase()}} </th> <th></th>
+<tr ng-repeat="occ in vm.occupants">
+    <td>{{occ.name}}</td>
+    <td class='fplan_day_cell' ng-repeat='day in vm.days'> <input type='checkbox' ng-click='vm.preventDayOverlap(day)' ng-model='occ.map_data[vm.selected_map_uid].schedule[day]'> </td>
+    <td><button class='btn btn-default' type='button' ng-click='occ.map_data = null;vm.occupants.splice($index, 1)'>-</button> </td>
+</tr>
+</table>
+<select ng-options='person as person.name for person in vm.people | filter:{map_data: null}' ng-model='vm.new_schedule_person'></select>
+<button class='btn btn-default' type='button' ng-click='vm.assignPersonToSeat()'>+</button>
+<br>
+
 
 <button class='btn btn-default' type='button' ng-click='vm.saveSeatEdits()'>Save</button>
-<button class='btn btn-default' type='button' ng-click='vm.closeEditWindow()'>Cancel</button>
+<button class='btn btn-default' type='button' ng-click='vm.deleteSeat()'>Delete</button>

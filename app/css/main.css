@@ -3,6 +3,15 @@ body{
     width:100%;
     overflow:hidden;
 }
+.fplan_selected_day {
+    font-size:16px;
+}
+.fplan_not_selected_day {
+    color:grey;
+}
+ul {
+    line-height:1em;
+}
 .fplan_controls{
     box-shadow: 2px 2px 3px #666666;
 }
@@ -59,4 +68,11 @@ body{
     background-color:yellow;
     stroke-width:10px;
     stroke:orange;
+}
+.fplan_empty_seat {
+    fill: cyan;
+}
+.fplan_empty_seat.hovered {
+    stroke-width:10px;
+    stroke:cyan;
 }

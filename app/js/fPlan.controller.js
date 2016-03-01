@@ -12,9 +12,13 @@
         var map_container = d3.select('.fplan_map_container');
         var vm = this;
         vm.selected_map_uid = vm.maps[0].uid;
+        vm.selected_map_uid_temp = vm.selected_map_uid;
         var smooth_click_thresh = 0;
         var map_svg, zoom, drag;
+        var fill = 'orange';
         vm.sidebar_closed=false;
+        vm.config = {};
+        width = screen.width;
 
         var loadMaps= function() {
             angular.forEach(vm.maps, function(map, key) {
@@ -29,19 +33,20 @@
                     }
                     map_container.node().appendChild(svgNode);
                     if (key == 0) {
-                        setVisibleMap(0, true);
+                        setVisibleMap(vm.maps[0].uid, true);
                     }
                 });
             })
         }
 
 
-        var setVisibleMap = function(el, force) { //reset all visibility just to be safe, then set new element
-            if (vm.maps[el].uid != vm.selected_map_uid || force) { //Only when map has changed or on first load
-                vm.selected_map_uid = vm.maps[el].uid;
-                map_svg = map_container.select('#' + vm.maps[el].uid);
+        var setVisibleMap = function(uid, force) { //reset all visibility just to be safe, then set new element
+            if (uid != vm.selected_map_uid || force) { //Only when map has changed or on first load
+                vm.selected_map_uid = uid;
+                map_svg = map_container.selectAll('svg').style('display', 'none');
+                map_svg = map_container.select('#' + uid);
                 map_svg.style('display', null).call(zoom).on('click', addSeatClickEvent);
-                addExistingSeats(el);
+                addExistingSeats(uid);
             }
         }
 
@@ -52,6 +57,9 @@
                     coords: d3.mouse(this),
                     uid: guid(),
                 };
+                if (vm.seats[vm.selected_map_uid] == null) {
+                    vm.seats[vm.selected_map_uid] = [];
+                }
                 $scope.$apply(function() {
                     vm.seats[vm.selected_map_uid].push(seat_obj);
                 });
@@ -60,18 +68,23 @@
         }
 
         function addSeatToMap(seat) {
-            map_svg.append("circle")
+            var node = map_svg.append("circle")
             .classed(seat.uid, true)
             .attr('uid', seat.uid)
             .classed('fplan_marker', true)
             .attr("cx", seat.coords[0])
             .attr("cy", seat.coords[1])
-            .attr("fill", "orange")
+            .attr("fill", fill)
             .attr("r", 10)
             .on('click', seatEdit)
             .on('mouseover', seatHoverEnter)
             .on('mouseout', seatHoverExit)
             .call(drag);
+
+            if (getOccupants(seat.uid).length <= 0) {
+                node.classed('fplan_empty_seat', true);
+            }
+
         }
 
         function seatHoverEnter(uid) {
@@ -101,25 +114,27 @@
                 templateUrl: 'app/templates/seat-edit.html',
                 controller: 'SeatEditCtrl as vm',
                 size: 'large',
+                backdrop:'static', //enforces transactions
                 resolve: {
-                    seat: function () {
-                        return seat_obj[0];
-                    },
-                    occupants: function() {
-                        return getOccupants(seat_obj[0].uid);
-                    },
-                    people: function() {
-                        return vm.people;
-                    }
+                    seat: function () {return seat_obj[0];},
+                    seats: function () {return vm.seats},
+                    occupants: function() {return getOccupants(seat_obj[0].uid);},
+                    people: function() { return vm.people; },
+                    selected_map_uid: function() { return vm.selected_map_uid;},
+                    days: function() { return days; },
+                    formatSchedule: function() {return formatSchedule}
                 }
             });
         }
 
-        var addExistingSeats = function(el) {
-            if (vm.seats.hasOwnProperty(vm.selected_map_uid)) {
-                angular.forEach(vm.seats[vm.selected_map_uid], function(seat, key) {
-                    addSeatToMap(seat);
-                });
+        var addExistingSeats = function(uid) {
+            if (!vm.config.hasOwnProperty(uid) || (vm.config.hasOwnProperty(uid) && !vm.config[uid].seats_loaded)) {
+                if (vm.seats.hasOwnProperty(uid)) {
+                    angular.forEach(vm.seats[uid], function(seat, key) {
+                        addSeatToMap(seat);
+                    });
+                }
+                vm.config[uid] = {seats_loaded: true};
             }
         }
 
@@ -195,9 +210,9 @@
             var retstring = '';
             angular.forEach(days, function(day, key) {
                 if(schedule[day]) {
-                    retstring += " <b>" + day[0].toUpperCase() + "</b> ";
+                    retstring += " <b class='fplan_selected_day'>" + day[0].toUpperCase() + "</b> ";
                 } else {
-                    retstring += " " + day[0].toUpperCase() + " ";
+                    retstring += "<span class='fplan_not_selected_day'> " + day[0].toUpperCase() + "</span> ";
                 }
             });
             return $sce.trustAsHtml(retstring);
@@ -223,8 +238,8 @@
         var init = function() {
             configD3Controls();
             loadMaps();
-            setVisibleMap(0);
             //exposed functions
+            vm.setVisibleMap = setVisibleMap;
             vm.zoomClick = zoomClick;
             vm.centerClick = centerClick;
             vm.getOccupants = getOccupants;
