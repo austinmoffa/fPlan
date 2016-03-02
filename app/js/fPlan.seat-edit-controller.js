@@ -12,10 +12,12 @@
         vm.selected_map_uid = selected_map_uid;
 
         vm.deleteSeat = function() {
-            vm.occupants = [];
             angular.forEach(vm.people, function(person, key) {
-                person.map_data = null;
+                if(person.map_data.hasOwnProperty(vm.selected_map_uid) && person.map_data[vm.selected_map_uid].seat == vm.seat.uid) {
+                    person.map_data = null;
+                }
             });
+            vm.occupants = [];
             angular.forEach(seats[vm.selected_map_uid], function(temp_seat, key) {
                 if (temp_seat.uid == vm.seat.uid) {
                     seats[vm.selected_map_uid].splice(key, 1)
