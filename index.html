@@ -22,8 +22,10 @@
 <script src="./app/demo/app.js"></script>
 </head>
 <body ng-app="mainApp" ng-controller="MainController as vm">
+<div ng-if='vm.maps && vm.people && vm.seats'>
 <f-plan maps='vm.maps' people='vm.people' seats='vm.seats'>
 </f-plan>
+</div>
 </body>
 </html>
 

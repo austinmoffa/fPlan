@@ -4,19 +4,18 @@ body{
     overflow:hidden;
 }
 .fplan_selected_day {
-    font-size:16px;
+    font-size:12px;
 }
 .fplan_not_selected_day {
     color:grey;
+    font-size:10px;
 }
-ul {
+.fplan_occupants_list {
     line-height:1em;
+    font-size:12px;
 }
 .fplan_controls{
     box-shadow: 2px 2px 3px #666666;
-}
-.fplan_size_toggle{
-
 }
 .fplan_map_controls{
     padding:2px;
@@ -41,7 +40,7 @@ ul {
 }
 .fplan_map_container{
     float:left;
-    max-height: 100vh;
+    height: 100vh;
     width:75%;
     overflow: hidden;
     box-shadow: 2px 2px 3px #666666;
