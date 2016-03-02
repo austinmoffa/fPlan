@@ -21,7 +21,7 @@
         <div class='fplan_control_content'>
             <div class='{{seat.uid}}' ng-mouseover='vm.seatHoverEnter(seat.uid)' ng-mouseleave='vm.seatHoverExit(seat.uid)' ng-repeat='seat in vm.seats[vm.selected_map_uid]'>
                 {{seat.name}}
-                <ul ng-repeat='occ in vm.getOccupants(seat.uid)'>
+                <ul class='fplan_occupants_list' ng-repeat='occ in vm.getOccupants(seat.uid)'>
                     <li> {{occ.name}} - <span ng-bind-html='occ.map_data[vm.selected_map_uid].formatted_schedule'></span> </li>
                 </ul>
             </div>
