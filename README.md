@@ -11,5 +11,7 @@ Loading a saved json will overwrite everything. Uploading under the "people" tab
 Make sure you click the "toggle edit" button to enable click-adding of new seats.
 
 Enjoy.
+## Dependencies
+This uses angularjs, d3, font-awesome, and a bit of bootstrap.
 ## License
 WTFPL 2.0

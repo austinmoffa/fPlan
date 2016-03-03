@@ -3,7 +3,6 @@
     "version": "0.1",
     "dependencies": {
         "angular": "latest",
-        "angular-route": "latest",
         "d3": "latest",
         "angular-bootstrap": "latest",
         "font-awesome": "latest"
