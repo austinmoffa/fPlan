@@ -13,7 +13,7 @@
 
         vm.deleteSeat = function() {
             angular.forEach(vm.people, function(person, key) {
-                if(person.map_data.hasOwnProperty(vm.selected_map_uid) && person.map_data[vm.selected_map_uid].seat == vm.seat.uid) {
+                if(person.hasOwnProperty('map_data') && person.map_data && person.map_data.hasOwnProperty(vm.selected_map_uid) && person.map_data[vm.selected_map_uid].seat == vm.seat.uid) {
                     person.map_data = null;
                 }
             });
@@ -23,8 +23,9 @@
                     seats[vm.selected_map_uid].splice(key, 1)
                 }
             });
+            var pip = d3.select('[uid=' + vm.seat.uid + ']');
+            d3.select(pip.node().parentNode).remove();
             d3.selectAll('.' + seat.uid).remove();
-            //d3.selectAll('#' + seat.uid).remove();
             vm.closeEditWindow();
         }
 
@@ -47,15 +48,27 @@
         vm.saveSeatEdits = function() {
             var empty = true;
             var full = false;
+            var displayString = '';
             if (vm.occupants.length > 0) {
+                angular.forEach(vm.occupants, function(occ, key) {
+                    displayString += occ.name;
+                    if (key != vm.occupants.length-1) {
+                        displayString += ", ";
+                    }
+                });
+
                 empty = false;
             }
 
             if (!empty && isSeatFull(seat.uid)) {
                 full = true;
             }
-            d3.select('[uid=' + vm.seat.uid + ']').classed('fplan_empty_seat', empty);
-            d3.select('[uid=' + vm.seat.uid + ']').classed('fplan_full_seat', full);
+
+            var pip = d3.select('[uid=' + vm.seat.uid + ']');
+            pip.classed('fplan_empty_seat', empty);
+            d3.select(pip.node().parentNode).select('text').html(displayString);
+            pip.classed('fplan_full_seat', full);
+
             vm.seat.name = vm.temp_seat.name;
             angular.forEach(vm.occupants, function(occ, key) {
                 occ.map_data[vm.selected_map_uid].formatted_schedule = '';

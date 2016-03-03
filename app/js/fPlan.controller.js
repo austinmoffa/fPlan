@@ -18,6 +18,7 @@
         var fill = 'orange';
         vm.sidebar_closed=false;
         vm.config = {};
+        vm.edit_mode = 'play';
         width = screen.width;
 
         var loadMaps= function() {
@@ -33,6 +34,7 @@
                     }
                     map_container.node().appendChild(svgNode);
                     var map_node = map_container.select('#' + map.uid);
+
                     map_node.html('<g>' + map_node.html() + '</g>');
 
                     if (key == 0) {
@@ -48,7 +50,9 @@
             if (uid != vm.selected_map_uid || force) { //Only when map has changed or on first load
                 vm.selected_map_uid = uid;
                 map_container.selectAll('svg').style('display', 'none');
+
                 map_svg = map_container.select('#' + uid);
+
                 map_svg.style('display', null);
                 map_svg.call(zoom).on('click', addSeatClickEvent);
                 addExistingSeats(uid);
@@ -58,6 +62,7 @@
         }
 
         function addSeatClickEvent() {
+            if (vm.edit_mode == 'play') return;
             var coords = d3.mouse(this);
             coords[0] = (coords[0] - zoom.translate()[0]) / zoom.scale();
             coords[1] = (coords[1] - zoom.translate()[1]) / zoom.scale();
@@ -78,7 +83,7 @@
         }
 
         function addSeatToMap(seat) {
-            var node = map_svg.select('g').append("circle")
+            var node = map_svg.select('g').append('g').classed('marker_wrapper', true).append("circle")
             .classed(seat.uid, true)
             .attr('uid', seat.uid)
             .classed('fplan_marker', true)
@@ -91,7 +96,18 @@
             .on('mouseout', seatHoverExit)
             .call(drag);
 
-            if (getOccupants(seat.uid).length <= 0) {
+            var occs = getOccupants(seat.uid);
+            var text = d3.select(node.node().parentNode).append('text').attr('x', node.attr('cx')).attr('y', node.attr('cy')).attr('dy', '-.25em').text('').attr('fill', 'black');
+
+            if (occs.length > 0) {
+                var displayString = '';
+                angular.forEach(occs, function(occ, key) {
+                    displayString += occ.name;
+                });
+                text.text(displayString);
+            }
+
+            if (occs.length <= 0) {
                 node.classed('fplan_empty_seat', true);
             } else if (isSeatFull(seat.uid)) {
                 node.classed('fplan_full_seat', true);
@@ -174,6 +190,7 @@
         }
 
         function dragged(d) {
+            d3.select(this.parentNode).select('text').attr('x', d3.event.x).attr('y', d3.event.y);
             d3.select(this).attr("cx", d3.event.x).attr("cy",  d3.event.y);
         }
 
@@ -210,9 +227,7 @@
             var ret = [];
             angular.forEach(vm.people, function(person, key) {
                 if (person.hasOwnProperty('map_data') && person.map_data && person.map_data.hasOwnProperty(vm.selected_map_uid) && person.map_data[vm.selected_map_uid].seat == suid) {
-                    if (!person.map_data[vm.selected_map_uid].hasOwnProperty('formatted_schedule')) {
-                        person.map_data[vm.selected_map_uid].formatted_schedule = formatSchedule(person.map_data[vm.selected_map_uid].schedule);
-                    }
+                    person.map_data[vm.selected_map_uid].formatted_schedule = formatSchedule(person.map_data[vm.selected_map_uid].schedule);
                     this.push(person);
                 }
             }, ret);
@@ -268,15 +283,50 @@
             });
         }
 
-        var addNewPerson = function() {
+        var addNewPerson = function(person) {
+            person = person || vm.temp_name;
             var person_obj = {
-                'name': vm.temp_name,
+                'name': person,
                 'uid': guid(),
                 'map_data': null,
             }
             vm.temp_name = '';
             vm.people.push(person_obj);
         }
+
+        vm.saveJson = function() {
+            var hiddenElement = document.createElement('a');
+            var savel = {
+                people: vm.people,
+                seats: vm.seats,
+            };
+
+            hiddenElement.href = 'data:text/json;charset=utf8,' + encodeURI(JSON.stringify(savel));
+            hiddenElement.target = '_blank';
+            hiddenElement.download = 'map_data.json';
+            hiddenElement.click();
+        }
+
+        vm.loadJson = function(data) {     
+            vm.people = data.people;
+            vm.seats = data.seats;
+
+            d3.selectAll('.marker_wrapper').remove();
+            vm.config = {}; //we're resetting so need to blank this
+            vm.addExistingSeats(vm.selected_map_uid);
+        }
+        
+        vm.loadPeopleCallback = function(data) {
+            data = data.split("\n");
+            angular.forEach(data, function(person, key) {
+                scope.vm.addNewPerson(person);
+            });
+        }
+        
+        vm.toggleEditMode = function() {
+            vm.edit_mode = vm.edit_mode=='play' ? 'stop' : 'play';
+        }
+
 
         var init = function() {
             configD3Controls();
@@ -290,6 +340,7 @@
             vm.addNewPerson = addNewPerson;
             vm.seatHoverEnter = seatHoverEnter;
             vm.seatHoverExit = seatHoverExit;
+            vm.addExistingSeats = addExistingSeats;
         }
 
         init();

@@ -1,10 +1,22 @@
 <div class='fplan_map_container' ng-class="{'fplan_fullsize':vm.sidebar_closed==true}">
     <div class='fplan_map_controls'>
+        Zoom:
         <button class='btn btn-default' type='button' ng-click='vm.zoomClick(-1)'><i class="fa fa-minus-circle"></i></button>
-        <button class='btn btn-default' type='button' ng-click='vm.zoomClick(0)'><i class="fa fa-undo"></i></button>
         <button class='btn btn-default' type='button' ng-click='vm.zoomClick(1)'><i class="fa fa-plus-circle"></i></button>
+        <button class='btn btn-default' type='button' ng-click='vm.zoomClick(0)'><i class="fa fa-undo"></i></button>
         <button class='btn btn-default' type='button' ng-click='vm.centerClick()'><i class="fa fa-arrows"></i></button>
+        Switch Maps:
         <select ng-options='map.uid as map.title for map in vm.maps' class='form-control' ng-change='vm.setVisibleMap(vm.selected_map_uid_temp)' ng-model='vm.selected_map_uid_temp' style='width:20%;display:inline'></select>
+
+        
+
+<button class='btn btn-default' ng-click='vm.saveJson()' type='button'>Save</button>
+<span class='btn btn-default btn-file'>
+    Load<input type='file' fileread fileread_callback='vm.loadJson'>
+</span>
+
+        Toggle Edit:
+        <button class='bt btn-default'  ng-click='vm.toggleEditMode()'> <i class='fa fa-{{vm.edit_mode}}'></i></button>
 
         <div class='fplan_size_toggle' style='float:right;'>
             <button class='btn btn-default' ng-click='vm.sidebar_closed=!vm.sidebar_closed;'><i class="fa fa-exchange"></i> </button>
@@ -34,15 +46,21 @@
     <br>
 
     <div class='fplan_right_people'>
-        <div class='fplan_control_header'>People</div>
+        <div class='fplan_control_header'> <div style='float:left;'> People </div>
+        
+        <div style='float:right' class='btn btn-default btn-file'>
+            <i class='fa fa-group'></i><input type='file' fileread fileread_callback='vm.loadPeopleCallback'>
+        </div>
+        
+        </div>
         <div class='fplan_control_content'>
         <table>
             <th>Name</th><th></th>
             <tr>
                 <td><input class='form-control' size='20' type='text' ng-model='vm.temp_name'></td>
-                <td><button class='btn btn-default' type='button' ng-click='vm.addNewPerson()'>+</button></td>
+                <td><button class='btn btn-default' type='button' ng-click='vm.addNewPerson()'><i class='fa fa-user-plus'></i></button></td>
             </tr>
-            <tr ng-repeat='person in vm.people' ng-if='!person.map_data'>
+            <tr ng-repeat='person in vm.people track by person.uid' ng-if='!person.map_data'>
                 <td><input size='20' type='text' ng-model='person.name' readonly></td>
                 <td><button class='btn btn-default' type='button' ng-click='vm.people.splice($index, 1)'>-</button></td>
             </tr>

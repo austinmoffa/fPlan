@@ -1,6 +1,6 @@
 (function() {
     angular
-    .module('FPlan', ['ui.bootstrap'])
+    .module('FPlan', ['ui.bootstrap', 'fileread'])
     .directive('fPlan', fPlan);
 
     function fPlan() {

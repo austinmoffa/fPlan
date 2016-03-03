@@ -37,11 +37,13 @@ body{
 .fplan_control_header{
     font-size:14px;
     line-height: 1.42857;
+    overflow:auto;
+    vertical-align:middle;
 }
 .fplan_map_container{
     float:left;
     height: 100vh;
-    width:75%;
+    width:80%;
     overflow: hidden;
     box-shadow: 2px 2px 3px #666666;
 }
@@ -52,7 +54,7 @@ body{
     float:right;
     height: 100vh;
     overflow: hidden;
-    width:25%;
+    width:20%;
 
 }
 .fplan_right_seats{
@@ -79,4 +81,24 @@ body{
 }
 .fplan_full_seat.hovered {
     stroke:red;
+}
+
+.btn-file {
+position: relative;
+overflow: hidden;
+}
+.btn-file input[type=file] {
+position: absolute;
+top: 0;
+right: 0;
+       min-width: 100%;
+       min-height: 100%;
+       font-size: 100px;
+       text-align: right;
+filter: alpha(opacity=0);
+opacity: 0;
+outline: none;
+background: white;
+cursor: inherit;
+display: block;
 }
