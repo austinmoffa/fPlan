@@ -3,5 +3,9 @@ fPlan is a really quick implementation of a space planning interface. Basically 
 
 I'm putting this out there because I've found need to make nearly this same project twice now and never again!
 
+## Demo
+Just download and open the index.html
+Everything should be straightforward.
+
 ## License
 WTFPL
