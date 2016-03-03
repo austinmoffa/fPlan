@@ -12,7 +12,7 @@
 
 <button class='btn btn-default' ng-click='vm.saveJson()' type='button'>Save</button>
 <span class='btn btn-default btn-file'>
-    Load<input type='file' fileread fileread_callback='vm.loadJson'>
+    Load<input type='file' fileread callback='vm.loadJson'>
 </span>
 
         Toggle Edit:
@@ -28,8 +28,8 @@
 <div class='fplan_controls fplan_right_controls' ng-if='!vm.sidebar_closed'>
 
 
-    <div class='fplan_right_seats'>
         <div class='fplan_control_header'>Seats</div>
+    <div class='fplan_right_seats'>
         <div class='fplan_control_content'>
             <div class='{{seat.uid}}' ng-mouseover='vm.seatHoverEnter(seat.uid)' ng-mouseleave='vm.seatHoverExit(seat.uid)' ng-repeat='seat in vm.seats[vm.selected_map_uid]'>
                 {{seat.name}}
@@ -44,16 +44,16 @@
 
 
     <br>
-
-    <div class='fplan_right_people'>
-        <div class='fplan_control_header'> <div style='float:left;'> People </div>
+ <div class='fplan_control_header'> <div style='float:left;'> People </div>
         
         <div style='float:right' class='btn btn-default btn-file'>
-            <i class='fa fa-group'></i><input type='file' fileread fileread_callback='vm.loadPeopleCallback'>
+            <i class='fa fa-group'></i><input type='file' fileread callback='vm.loadPeopleCallback'>
         </div>
         
         </div>
-        <div class='fplan_control_content'>
+
+    <div class='fplan_right_people'>
+               <div class='fplan_control_content'>
         <table>
             <th>Name</th><th></th>
             <tr>

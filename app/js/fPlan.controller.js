@@ -307,7 +307,8 @@
             hiddenElement.click();
         }
 
-        vm.loadJson = function(data) {     
+        var loadJson = function(data) {     
+            data = JSON.parse(data);
             vm.people = data.people;
             vm.seats = data.seats;
 
@@ -316,10 +317,10 @@
             vm.addExistingSeats(vm.selected_map_uid);
         }
         
-        vm.loadPeopleCallback = function(data) {
+        var loadPeopleCallback = function(data) {
             data = data.split("\n");
             angular.forEach(data, function(person, key) {
-                scope.vm.addNewPerson(person);
+                vm.addNewPerson(person);
             });
         }
         
@@ -341,6 +342,8 @@
             vm.seatHoverEnter = seatHoverEnter;
             vm.seatHoverExit = seatHoverExit;
             vm.addExistingSeats = addExistingSeats;
+            vm.loadJson = loadJson;
+            vm.loadPeopleCallback = loadPeopleCallback;
         }
 
         init();

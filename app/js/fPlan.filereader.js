@@ -2,7 +2,7 @@ angular.module('fileread', [])
 .directive("fileread", [function ($sce) {
         return {
 scope: {
-    fileread_callback: "=",
+    callback: "=",
 },
 link: function (scope, element, attributes) {
 element.bind("change", function (changeEvent) {
@@ -11,8 +11,8 @@ element.bind("change", function (changeEvent) {
         scope.$apply(function () {
                 var fileread = loadEvent.target.result;
                 fileread = fileread.split(',')[1];
-                fileread = JSON.parse(atob(fileread));
-                scope.fileread_callback(fileread);
+                fileread = atob(fileread);
+                scope.callback(fileread);
 
            });
         }
